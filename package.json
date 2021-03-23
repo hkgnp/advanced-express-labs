@@ -1,0 +1,21 @@
+{
+  "name": "advanced-express-labs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "bookshelf": "^1.2.0",
+    "cors": "^2.8.5",
+    "db-migrate": "^0.11.12",
+    "db-migrate-mysql": "^2.1.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "hbs": "^4.1.1",
+    "knex": "^0.95.2",
+    "mysql2": "^2.2.5",
+    "wax-on": "^1.2.2"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  }
+}

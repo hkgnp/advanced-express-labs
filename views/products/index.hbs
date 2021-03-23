@@ -1,0 +1,12 @@
+{{#extends 'base'}}
+
+{{#block 'title'}} Index of all Products {{/block}}
+
+{{#block 'content'}}
+<ul>
+  {{#each products}}
+  <li>{{ this.name }} ({{ this.cost }} cents)</li>
+  {{/each}}
+</ul>
+{{/block}}
+{{/extends}}
