@@ -3,10 +3,25 @@
 {{#block 'title'}} Index of all Products {{/block}}
 
 {{#block 'content'}}
-<ul>
-  {{#each products}}
-  <li>{{ this.name }} ({{ this.cost }} cents)</li>
-  {{/each}}
-</ul>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Cost (in cents)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+      <tr>
+        <td>{{ this.name }}</td>
+        <td>{{ this.cost }}</td>
+        <td>{{ this.description }}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
 {{/block}}
 {{/extends}}
