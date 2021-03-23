@@ -10,6 +10,7 @@
         <th>Name</th>
         <th>Cost (in cents)</th>
         <th>Description</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +19,13 @@
         <td>{{ this.name }}</td>
         <td>{{ this.cost }}</td>
         <td>{{ this.description }}</td>
+        <td>
+          <a href="/products/{{ this.id }}/update" class="btn btn-primary"
+            >Update</a
+          ><a href="/products/{{ this.id }}/delete" class="btn btn-danger ml-2"
+            >Delete</a
+          >
+        </td>
       </tr>
       {{/each}}
     </tbody>

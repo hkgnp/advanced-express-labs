@@ -30,7 +30,7 @@ const bootstrapField = function (name, object) {
 
 const createProductForm = () => {
   return forms.create({
-    name: fields.string({
+    title: fields.string({
       required: true,
       errorAfterField: true,
       cssClass: {
@@ -46,6 +46,34 @@ const createProductForm = () => {
       validators: [validators.integer()],
     }),
     description: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    date: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    stock: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    height: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    width: fields.string({
       required: true,
       errorAfterField: true,
       cssClass: {

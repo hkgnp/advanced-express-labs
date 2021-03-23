@@ -87,4 +87,26 @@ router.post('/:product_id/update', async (req, res) => {
   });
 });
 
+router.get('/:product_id/delete', async (req, res) => {
+  const productToDelete = await Product.where({
+    id: req.params.product_id,
+  }).fetch({
+    required: true,
+  });
+
+  res.render('products/delete.hbs', {
+    product: productToDelete.toJSON(),
+  });
+});
+
+router.post('/:product_id/delete', async (req, res) => {
+  const productToDelete = await Product.where({
+    id: req.params.product_id,
+  }).fetch({
+    required: true,
+  });
+
+  await productToDelete.destroy();
+  res.redirect('/products');
+});
 module.exports = router;
