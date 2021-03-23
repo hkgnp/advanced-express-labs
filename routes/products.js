@@ -4,6 +4,9 @@ const router = express.Router();
 // import the Product model
 const { Product } = require('../models');
 
+// import the forms
+const { createProductForm, bootstrapField } = require('../forms');
+
 router.get('/', async (req, res) => {
   // Select * fro Products
 
@@ -14,4 +17,11 @@ router.get('/', async (req, res) => {
   });
 });
 
+router.get('/create', (req, res) => {
+  const productForm = createProductForm();
+
+  res.render('products/create', {
+    form: productForm.toHTML(bootstrapField),
+  });
+});
 module.exports = router;
