@@ -29,7 +29,7 @@ const bootstrapField = function (name, object) {
   return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createProductForm = (categories) => {
+const createProductForm = (categories, tags) => {
   return forms.create({
     title: fields.string({
       required: true,
@@ -53,12 +53,13 @@ const createProductForm = (categories) => {
         label: ['form-label'],
       },
     }),
-    date: fields.string({
+    date: fields.date({
       required: true,
       errorAfterField: true,
       cssClass: {
         label: ['form-label'],
       },
+      widget: widgets.date(),
     }),
     stock: fields.string({
       required: true,
@@ -90,6 +91,15 @@ const createProductForm = (categories) => {
       },
       widget: widgets.select(),
       choices: categories,
+    }),
+    tags: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      widget: widgets.multipleSelect(),
+      choices: tags,
     }),
   });
 };

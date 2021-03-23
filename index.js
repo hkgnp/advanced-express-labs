@@ -1,5 +1,6 @@
 const express = require('express');
 const hbs = require('hbs');
+const moment = require('moment');
 const wax = require('wax-on');
 require('dotenv').config();
 const cors = require('cors');
@@ -19,6 +20,14 @@ app.use(express.static('public'));
 // setup wax-on
 wax.on(hbs.handlebars);
 wax.setLayoutPath('./views/layouts');
+
+// date time
+hbs.registerHelper('dateFormat', function (date, options) {
+  const formatToUse =
+    (arguments[1] && arguments[1].hash && arguments[1].hash.format) ||
+    'DD/MM/YYYY';
+  return moment(date).format(formatToUse);
+});
 
 // enable forms
 app.use(

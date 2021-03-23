@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import the Product model
-const { Product, Category } = require('../models');
+const { Product, Category, Tag } = require('../models');
 
 // import the forms
 const { createProductForm, bootstrapField } = require('../forms');
@@ -24,7 +24,12 @@ router.get('/create', async (req, res) => {
   const allCategories = fetchCategories.map((category) => {
     return [category.get('id'), category.get('name')];
   });
-  const productForm = createProductForm(allCategories);
+
+  const fetchTags = await Tag.fetchAll();
+  const allTags = fetchTags.map((tag) => {
+    return [tag.get('id'), tag.get('name')];
+  });
+  const productForm = createProductForm(allCategories, allTags);
 
   res.render('products/create', {
     form: productForm.toHTML(bootstrapField),
@@ -57,14 +62,20 @@ router.post('/create', (req, res) => {
 });
 
 router.get('/:product_id/update', async (req, res) => {
+  const fetchCategories = await Category.fetchAll();
+  const allCategories = fetchCategories.map((category) => {
+    return [category.get('id'), category.get('name')];
+  });
+
   //1. Get the product that we want to update
   const productToEdit = await Product.where({
     id: req.params.product_id,
   }).fetch({
     required: true,
+    withRelated: ['category'],
   });
 
-  const form = createProductForm();
+  const form = createProductForm(allCategories);
   form.fields.title.value = productToEdit.get('title');
   form.fields.cost.value = productToEdit.get('cost');
   form.fields.description.value = productToEdit.get('description');
@@ -72,6 +83,7 @@ router.get('/:product_id/update', async (req, res) => {
   form.fields.stock.value = productToEdit.get('stock');
   form.fields.height.value = productToEdit.get('height');
   form.fields.width.value = productToEdit.get('width');
+  form.fields.category_id.value = productToEdit.get('category_id');
 
   res.render('products/update', {
     form: form.toHTML(bootstrapField),
