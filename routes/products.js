@@ -31,9 +31,13 @@ router.post('/create', (req, res) => {
     success: async (form) => {
       // Use the product moodel to save a new instance of Product
       const newProduct = new Product();
-      newProduct.set('name', form.data.name);
+      newProduct.set('title', form.data.title);
       newProduct.set('cost', form.data.cost);
       newProduct.set('description', form.data.description);
+      newProduct.set('date', form.data.date);
+      newProduct.set('stock', form.data.stock);
+      newProduct.set('height', form.data.height);
+      newProduct.set('width', form.data.width);
       await newProduct.save();
       res.redirect('/products');
     },
@@ -54,9 +58,13 @@ router.get('/:product_id/update', async (req, res) => {
   });
 
   const form = createProductForm();
-  form.fields.name.value = productToEdit.get('name');
+  form.fields.title.value = productToEdit.get('title');
   form.fields.cost.value = productToEdit.get('cost');
   form.fields.description.value = productToEdit.get('description');
+  form.fields.date.value = productToEdit.get('date');
+  form.fields.stock.value = productToEdit.get('stock');
+  form.fields.height.value = productToEdit.get('height');
+  form.fields.width.value = productToEdit.get('width');
 
   res.render('products/update', {
     form: form.toHTML(bootstrapField),
