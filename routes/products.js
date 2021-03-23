@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import the Product model
-const { Product } = require('../models');
+const { Product, Category } = require('../models');
 
 // import the forms
 const { createProductForm, bootstrapField } = require('../forms');
@@ -10,15 +10,21 @@ const { createProductForm, bootstrapField } = require('../forms');
 router.get('/', async (req, res) => {
   // Select * fro Products
 
-  let products = await Product.collection().fetch();
+  let products = await Product.collection().fetch({
+    withRelated: ['category'],
+  });
 
   res.render('products/index', {
     products: products.toJSON(),
   });
 });
 
-router.get('/create', (req, res) => {
-  const productForm = createProductForm();
+router.get('/create', async (req, res) => {
+  const fetchCategories = await Category.fetchAll();
+  const allCategories = fetchCategories.map((category) => {
+    return [category.get('id'), category.get('name')];
+  });
+  const productForm = createProductForm(allCategories);
 
   res.render('products/create', {
     form: productForm.toHTML(bootstrapField),
@@ -38,6 +44,7 @@ router.post('/create', (req, res) => {
       newProduct.set('stock', form.data.stock);
       newProduct.set('height', form.data.height);
       newProduct.set('width', form.data.width);
+      newProduct.set('category_id', form.data.category_id);
       await newProduct.save();
       res.redirect('/products');
     },
