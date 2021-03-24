@@ -101,6 +101,7 @@ router.get('/:product_id/update', async (req, res) => {
   form.fields.height.value = productToEdit.get('height');
   form.fields.width.value = productToEdit.get('width');
   form.fields.category_id.value = productToEdit.get('category_id');
+  // Set selected tags to the form to be displayed
   form.fields.tags.value = selectedTags;
 
   res.render('products/update', {
