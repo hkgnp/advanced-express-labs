@@ -7,6 +7,8 @@ const cors = require('cors');
 const landingRoutes = require('./routes/landing');
 const corporateRoutes = require('./routes/corporate');
 const productsRoutes = require('./routes/products');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 // create an instance of express app
 let app = express();
@@ -36,12 +38,37 @@ app.use(
   })
 );
 
-(async () => {
+// set up session
+app.use(
+  session({
+    // Secret key for the session. Needs to be complex.
+    secret: 'secret',
+    // Will not resave the session if there are no changes to the session
+    resave: false,
+    // If a user comes in without a session, immediately create one
+    saveUninitialized: true,
+  })
+);
+
+// Set up flash
+app.use(flash());
+
+// Set up middleware: something that sits between the route and the user
+app.use((req, res, next) => {
+  // Inject success and error messages into the hbs file
+  res.locals.success_messages = req.flash('success_messages');
+  res.locals.error_messages = req.flash('error_messages');
+  next();
+});
+
+const main = async () => {
   app.use('/', landingRoutes);
   app.use('/company', corporateRoutes);
   app.use('/products', productsRoutes);
-})();
+};
 
-app.listen(3001, () => {
-  console.log('Server has started on port 3001');
+main();
+
+app.listen(3000, () => {
+  console.log('Server has started on port 3000');
 });

@@ -19,10 +19,24 @@
     <title>{{#block 'title'}}{{/block}}</title>
   </head>
 
-  <body>
-    <section class="container-fluid">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/products">Navbar</a>
+  <body class="bg-dark">
+    <!-- Inject success message -->
+    {{#if success_messages}}
+    {{#each success_messages}}
+    <div class="alert alert-success">{{ this }}</div>
+    {{/each}}
+    {{/if}}
+
+    <!-- Inject error message -->
+    {{#if error_messages}}
+    {{#each error_messages}}
+    <div class="alert alert-danger">{{ this }}</div>
+    {{/each}}
+    {{/if}}
+
+    <section class="container-fluid bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/products">PostersTomorrow</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -48,7 +62,9 @@
           </div>
         </div>
       </nav>
+      <div class="text-light">
       {{#block 'content'}}{{/block}}
+      </div>
     </section>
 
     <!-- Optional JavaScript -->

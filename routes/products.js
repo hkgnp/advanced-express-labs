@@ -29,6 +29,7 @@ router.get('/create', async (req, res) => {
   const allTags = fetchTags.map((tag) => {
     return [tag.get('id'), tag.get('name')];
   });
+
   const productForm = createProductForm(allCategories, allTags);
 
   res.render('products/create', {
@@ -36,8 +37,18 @@ router.get('/create', async (req, res) => {
   });
 });
 
-router.post('/create', (req, res) => {
-  const productForm = createProductForm();
+router.post('/create', async (req, res) => {
+  const fetchCategories = await Category.fetchAll();
+  const allCategories = fetchCategories.map((category) => {
+    return [category.get('id'), category.get('name')];
+  });
+
+  const fetchTags = await Tag.fetchAll();
+  const allTags = fetchTags.map((tag) => {
+    return [tag.get('id'), tag.get('name')];
+  });
+
+  const productForm = createProductForm(allCategories, allTags);
   productForm.handle(req, {
     success: async (form) => {
       let { tags, ...productData } = form.data;
@@ -58,9 +69,15 @@ router.post('/create', (req, res) => {
         await newProduct.tags().attach(tags.split(','));
       }
 
+      // Inject flash message
+      req.flash(
+        'success_messages',
+        'New product has been created successfully'
+      );
       res.redirect('/products');
     },
     error: (form) => {
+      // req.flash('error_messages', 'Please correct all errors and try again');
       res.render('products/create', {
         form: form.toHTML(bootstrapField),
       });
@@ -150,9 +167,12 @@ router.post('/:product_id/update', async (req, res) => {
       productToEdit.tags().detach(selectedTags);
       productToEdit.tags().attach(newTagsId);
 
+      // Inject flash message
+      req.flash('success_messages', 'Product has been updated successfully');
+
       res.redirect('/products');
     },
-    error: async (form) => {
+    error: (form) => {
       res.render('products/update', {
         form: form.toHTML(bootstrapField),
       });
@@ -180,6 +200,8 @@ router.post('/:product_id/delete', async (req, res) => {
   });
 
   await productToDelete.destroy();
+
+  req.flash('success_messages', 'Product has been deleted successfully');
   res.redirect('/products');
 });
 module.exports = router;
