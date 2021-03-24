@@ -40,17 +40,24 @@ router.post('/create', (req, res) => {
   const productForm = createProductForm();
   productForm.handle(req, {
     success: async (form) => {
+      let { tags, ...productData } = form.data;
+
       // Use the product moodel to save a new instance of Product
       const newProduct = new Product();
-      newProduct.set('title', form.data.title);
-      newProduct.set('cost', form.data.cost);
-      newProduct.set('description', form.data.description);
-      newProduct.set('date', form.data.date);
-      newProduct.set('stock', form.data.stock);
-      newProduct.set('height', form.data.height);
-      newProduct.set('width', form.data.width);
-      newProduct.set('category_id', form.data.category_id);
+      newProduct.set(productData);
+      // newProduct.set('cost', form.data.cost);
+      // newProduct.set('description', form.data.description);
+      // newProduct.set('date', form.data.date);
+      // newProduct.set('stock', form.data.stock);
+      // newProduct.set('height', form.data.height);
+      // newProduct.set('width', form.data.width);
+      // newProduct.set('category_id', form.data.category_id);
       await newProduct.save();
+
+      if (tags) {
+        await newProduct.tags().attach(tags.split(','));
+      }
+
       res.redirect('/products');
     },
     error: (form) => {
@@ -66,16 +73,26 @@ router.get('/:product_id/update', async (req, res) => {
   const allCategories = fetchCategories.map((category) => {
     return [category.get('id'), category.get('name')];
   });
+  const fetchTags = await Tag.fetchAll();
+  const allTags = fetchTags.map((tag) => {
+    return [tag.get('id'), tag.get('name')];
+  });
 
   //1. Get the product that we want to update
   const productToEdit = await Product.where({
     id: req.params.product_id,
   }).fetch({
     required: true,
-    withRelated: ['category'],
+    withRelated: ['category', 'tags'],
   });
 
-  const form = createProductForm(allCategories);
+  // Option 1
+  // const selectedTags = await productToEdit.related('tags').pluck('id');
+
+  // Option 2
+  const selectedTags = productToEdit.toJSON().tags.map((t) => t.id);
+
+  const form = createProductForm(allCategories, allTags);
   form.fields.title.value = productToEdit.get('title');
   form.fields.cost.value = productToEdit.get('cost');
   form.fields.description.value = productToEdit.get('description');
@@ -84,6 +101,7 @@ router.get('/:product_id/update', async (req, res) => {
   form.fields.height.value = productToEdit.get('height');
   form.fields.width.value = productToEdit.get('width');
   form.fields.category_id.value = productToEdit.get('category_id');
+  form.fields.tags.value = selectedTags;
 
   res.render('products/update', {
     form: form.toHTML(bootstrapField),
@@ -96,14 +114,41 @@ router.post('/:product_id/update', async (req, res) => {
     id: req.params.product_id,
   }).fetch({
     required: true,
+    withRelated: ['tags'],
   });
 
+  // Option 1
+  // const selectedTags = await productToEdit.related('tags').pluck('id');
+
+  // Option 2
+  const selectedTags = productToEdit.toJSON().tags.map((t) => t.id);
   const productForm = createProductForm();
 
   productForm.handle(req, {
     success: async (form) => {
-      productToEdit.set(form.data);
+      const { tags, ...productData } = form.data;
+      productToEdit.set(productData);
       productToEdit.save();
+
+      // Update tags
+      const newTagsId = tags.split(',');
+
+      // ultra-complex solution
+      // // remove all the tags that don't belong to the product
+      // // i.e, find all the tags that WERE part of the product but not in the form
+      // let toRemove = existingTagsId.filter(id =>
+      //     newTagsId.includes(id) === false);
+      // await productToEdit.tags().detach(toRemove);
+
+      // // add in all the tags selected in the form
+      // // i.e select all the tags that are in the form but not added to the product yet
+      // let toAdd = newTagsId.filter(id => existingTagsId.includes(id) === false);
+      // await productToEdit.tags().attach(toAdd);
+
+      // smart but not as efficient
+      productToEdit.tags().detach(selectedTags);
+      productToEdit.tags().attach(newTagsId);
+
       res.redirect('/products');
     },
     error: async (form) => {
