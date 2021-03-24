@@ -7,6 +7,7 @@ const cors = require('cors');
 const landingRoutes = require('./routes/landing');
 const corporateRoutes = require('./routes/corporate');
 const productsRoutes = require('./routes/products');
+const userRoutes = require('./routes/users');
 const session = require('express-session');
 const flash = require('connect-flash');
 
@@ -65,6 +66,7 @@ const main = async () => {
   app.use('/', landingRoutes);
   app.use('/company', corporateRoutes);
   app.use('/products', productsRoutes);
+  app.use('/users', userRoutes);
 };
 
 main();
