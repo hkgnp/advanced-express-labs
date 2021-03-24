@@ -30,7 +30,9 @@
         <td>{{ this.height }}</td>
         <td>{{ this.width }}</td>
         <td>{{ this.category.name }}</td>
-        <td>{{ this.tags.name }}</td>
+        <td>{{#each this.tags}}
+          <span class="badge badge-pill badge-info">{{this.name}}</span>
+          {{/each}}</td>
         <td>
           <a href="/products/{{ this.id }}/update" class="btn btn-primary btn-sm"
             >Update</a

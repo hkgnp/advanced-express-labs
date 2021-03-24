@@ -11,8 +11,10 @@ router.get('/', async (req, res) => {
   // Select * fro Products
 
   let products = await Product.collection().fetch({
-    withRelated: ['category'],
+    withRelated: ['category', 'tags'],
   });
+
+  // res.send(products);
 
   res.render('products/index', {
     products: products.toJSON(),
