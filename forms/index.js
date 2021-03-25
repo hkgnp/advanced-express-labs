@@ -101,10 +101,85 @@ const createProductForm = (categories, tags) => {
       widget: widgets.multipleSelect(),
       choices: tags,
     }),
-    image_url: fields.string({
+    img_url: fields.string({
       required: true,
       errorAfterField: true,
       widget: widgets.hidden(),
+    }),
+  });
+};
+
+const createProductSearchForm = (categories, tags) => {
+  return forms.create({
+    title: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    cost: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      validators: [validators.integer()],
+    }),
+    description: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    date: fields.date({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      widget: widgets.date(),
+    }),
+    stock: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    height: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    width: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    category_id: fields.string({
+      label: 'Category',
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      widget: widgets.select(),
+      choices: categories,
+    }),
+    tags: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      widget: widgets.multipleSelect(),
+      choices: tags,
     }),
   });
 };
@@ -167,6 +242,7 @@ const loginUserForm = () => {
 module.exports = {
   bootstrapField,
   createProductForm,
+  createProductSearchForm,
   createUserForm,
   loginUserForm,
 };

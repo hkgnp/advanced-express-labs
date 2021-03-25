@@ -5,22 +5,46 @@ const router = express.Router();
 const { Product, Category, Tag } = require('../models');
 
 // import the forms
-const { createProductForm, bootstrapField } = require('../forms');
+const {
+  createProductForm,
+  createProductSearchForm,
+  bootstrapField,
+} = require('../forms');
 
 // import middleware protection
 const { checkifLoggedIn } = require('../middleware');
 
 router.get('/', async (req, res) => {
-  // Select * fro Products
-
-  let products = await Product.collection().fetch({
-    withRelated: ['category', 'tags'],
+  const fetchCategories = await Category.fetchAll();
+  const allCategories = fetchCategories.map((category) => {
+    return [category.get('id'), category.get('name')];
   });
 
-  // res.send(products);
+  const fetchTags = await Tag.fetchAll();
+  const allTags = fetchTags.map((tag) => {
+    return [tag.get('id'), tag.get('name')];
+  });
 
-  res.render('products/index', {
-    products: products.toJSON(),
+  const searchForm = createProductSearchForm(allCategories, allTags);
+
+  // Create a base query (aka a query builder)
+  let q = Product.collection();
+
+  searchForm.handle(req, {
+    // If empty, display all products
+    empty: async (form) => {
+      // Select * fro Products
+      let products = await q.fetch({
+        withRelated: ['category', 'tags'],
+      });
+
+      // res.send(products);
+
+      res.render('products/index', {
+        products: products.toJSON(),
+        form: form.toHTML(bootstrapField),
+      });
+    },
   });
 });
 

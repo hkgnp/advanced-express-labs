@@ -3,6 +3,10 @@
 {{#block 'title'}} Index of all Posters {{/block}}
 
 {{#block 'content'}}
+<form method="GET">
+  {{{form}}}<input type="submit" class="btn btn-primary btn-sm mb-5" />
+</form>
+
 <div class="table-responsive table-dark">
   <table class="table">
     <thead>
@@ -30,13 +34,19 @@
         <td>{{ this.height }}</td>
         <td>{{ this.width }}</td>
         <td>{{ this.category.name }}</td>
-        <td>{{#each this.tags}}
-          <span class="badge badge-pill badge-info">{{this.name}}</span>
-          {{/each}}</td>
         <td>
-          <a href="/products/{{ this.id }}/update" class="btn btn-primary btn-sm"
+          {{#each this.tags}}
+          <span class="badge badge-pill badge-info">{{ this.name }}</span>
+          {{/each}}
+        </td>
+        <td>
+          <a
+            href="/products/{{ this.id }}/update"
+            class="btn btn-primary btn-sm"
             >Update</a
-          ><a href="/products/{{ this.id }}/delete" class="btn btn-danger ml-2 btn-sm"
+          ><a
+            href="/products/{{ this.id }}/delete"
+            class="btn btn-danger ml-2 btn-sm"
             >Delete</a
           >
         </td>
