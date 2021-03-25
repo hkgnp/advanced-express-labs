@@ -7,6 +7,9 @@ const { Product, Category, Tag } = require('../models');
 // import the forms
 const { createProductForm, bootstrapField } = require('../forms');
 
+// import middleware protection
+const { checkifLoggedIn } = require('../middleware');
+
 router.get('/', async (req, res) => {
   // Select * fro Products
 
@@ -36,6 +39,9 @@ router.get('/create', async (req, res) => {
 
   res.render('products/create', {
     form: productForm.toHTML(bootstrapField),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
   });
 });
 
