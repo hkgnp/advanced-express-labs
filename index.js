@@ -10,6 +10,7 @@ const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/users');
 const session = require('express-session');
 const flash = require('connect-flash');
+const csurf = require('csurf');
 
 // create an instance of express app
 let app = express();
@@ -54,6 +55,20 @@ app.use(
 // Set up flash
 app.use(flash());
 
+// Set up csurf
+app.use(csurf());
+app.use((err, req, res, next) => {
+  if (err) {
+    req.flash(
+      'error_messages',
+      'The form has expired. Please reload your page.'
+    );
+    res.redirect('back');
+  } else {
+    next();
+  }
+});
+
 // Set up middleware
 // Middleware is something that sits between the route and the user
 
@@ -68,6 +83,12 @@ app.use((req, res, next) => {
 // User session middleware
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
+  next();
+});
+
+// req.csrfToken
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
   next();
 });
 
