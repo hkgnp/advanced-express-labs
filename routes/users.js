@@ -36,11 +36,7 @@ router.post('/register', async (req, res) => {
       newUser.set(userData);
       await newUser.save();
 
-      // req.flash(
-      //   'success_messages',
-      //   'You have been registered successfully. You may now proceed to login'
-      // );
-      // res.redirect('/users/login');
+      // Proceed to login user after registering
       const loginForm = loginUserForm();
       loginForm.handle(req, {
         success: async (form) => {
@@ -64,7 +60,7 @@ router.post('/register', async (req, res) => {
               };
               req.flash(
                 'success_messages',
-                `Welcome back ${req.session.user.username}`
+                `Welcome ${req.session.user.username}! Thanks for registering!`
               );
               res.redirect('/products');
             } else {

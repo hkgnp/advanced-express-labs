@@ -11,6 +11,7 @@ const userRoutes = require('./routes/users');
 const session = require('express-session');
 const flash = require('connect-flash');
 const csurf = require('csurf');
+const cloudinaryRoutes = require('./routes/cloudinary');
 
 // create an instance of express app
 let app = express();
@@ -97,6 +98,7 @@ const main = async () => {
   app.use('/company', corporateRoutes);
   app.use('/products', productsRoutes);
   app.use('/users', userRoutes);
+  app.use('/cloudinary', cloudinaryRoutes);
 };
 
 main();
