@@ -7,3 +7,4 @@ __pycache__/
 node_modules
 dev.db
 .env
+.DS_Store
