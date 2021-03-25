@@ -35,38 +35,55 @@
     {{/if}}
 
     <section class="container-fluid bg-dark">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/products">PostersTomorrow</a>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+        <a class="navbar-brand" href="#">PostersTomorrow</a>
         <button
           class="navbar-toggler"
           type="button"
           data-toggle="collapse"
-          data-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="/products"
-              >Home <span class="sr-only">(current)</span></a
-            >
-            <a class="nav-item nav-link" href="/about-us">About</a>
-            <a class="nav-item nav-link" href="/contact-us">Contact</a>
-            <a class="nav-item nav-link" href="/products/create"
-              >Create Product</a
-            >
-            <a class="nav-item nav-link disabled" href="#">Disabled</a>
-          </div>
-          <a href="/users/login" class="btn btn-info">Log In</a>
-          <a href="/users/register" class="btn btn-primary ml-2">Register</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/products"
+                >All Products <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/products/create">Create Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about-us">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact-us">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link disabled"
+                href="#"
+                tabindex="-1"
+                aria-disabled="true"
+                >Disabled</a
+              >
+            </li>
+          </ul>
+          <a href="/users/login" class="btn btn-outline-warning my-2 my-sm-0">
+            Login
+          </a>
+          <a href="/users/register" class="btn btn-warning my-2 my-sm-0 ml-2">
+            Register
+          </a>
         </div>
       </nav>
-      <div class="text-light">
-      {{#block 'content'}}{{/block}}
-      </div>
+      <div class="text-light">{{#block 'content'}}{{/block}}</div>
     </section>
 
     <!-- Optional JavaScript -->

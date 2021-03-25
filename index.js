@@ -54,11 +54,20 @@ app.use(
 // Set up flash
 app.use(flash());
 
-// Set up middleware: something that sits between the route and the user
+// Set up middleware
+// Middleware is something that sits between the route and the user
+
+// Flash messages middleware
 app.use((req, res, next) => {
   // Inject success and error messages into the hbs file
   res.locals.success_messages = req.flash('success_messages');
   res.locals.error_messages = req.flash('error_messages');
+  next();
+});
+
+// User session middleware
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
   next();
 });
 
