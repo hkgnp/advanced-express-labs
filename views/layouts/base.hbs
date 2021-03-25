@@ -75,12 +75,18 @@
               >
             </li>
           </ul>
+          {{#if user}}
+          <a href="/users/logout" class="btn btn-danger my-2 my-sm-0">
+            Logout
+          </a>
+          {{else}}
           <a href="/users/login" class="btn btn-outline-warning my-2 my-sm-0">
             Login
           </a>
           <a href="/users/register" class="btn btn-warning my-2 my-sm-0 ml-2">
             Register
           </a>
+          {{/if}}
         </div>
       </nav>
       <div class="text-light">{{#block 'content'}}{{/block}}</div>
