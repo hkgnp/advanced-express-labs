@@ -262,6 +262,7 @@ const userProfile = () => {
       cssClass: {
         label: ['form-label'],
       },
+      value: 
     }),
     email: fields.string({
       required: true,
@@ -280,4 +281,5 @@ module.exports = {
   createProductSearchForm,
   createUserForm,
   loginUserForm,
+  userProfile,
 };

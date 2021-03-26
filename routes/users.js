@@ -6,7 +6,12 @@ const crypto = require('crypto');
 const { User } = require('../models');
 
 // import the forms
-const { createUserForm, bootstrapField, loginUserForm } = require('../forms');
+const {
+  createUserForm,
+  bootstrapField,
+  loginUserForm,
+  userProfile,
+} = require('../forms');
 
 // Hash password for registration and login
 const getHashedPassword = (password) => {
@@ -148,9 +153,11 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/profile', (req, res) => {
+  const userProfileForm = userProfile();
   if (req.session.user) {
     res.render('users/profile', {
       user: req.session.user,
+      form: userProfileForm.toHTML(bootstrapField),
     });
   } else {
     req.flash(
