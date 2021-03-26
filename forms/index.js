@@ -118,7 +118,15 @@ const createProductSearchForm = (categories, tags) => {
         label: ['form-label'],
       },
     }),
-    cost: fields.string({
+    min_cost: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      validators: [validators.integer()],
+    }),
+    max_cost: fields.string({
       required: false,
       errorAfterField: true,
       cssClass: {
@@ -141,7 +149,14 @@ const createProductSearchForm = (categories, tags) => {
       },
       widget: widgets.date(),
     }),
-    stock: fields.string({
+    min_stock: fields.string({
+      required: false,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    max_stock: fields.string({
       required: false,
       errorAfterField: true,
       cssClass: {
@@ -235,6 +250,26 @@ const loginUserForm = () => {
       cssClass: {
         label: ['form-label'],
       },
+    }),
+  });
+};
+
+const userProfile = () => {
+  return forms.create({
+    username: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+    }),
+    email: fields.string({
+      required: true,
+      errorAfterField: true,
+      cssClass: {
+        label: ['form-label'],
+      },
+      validators: [validators.email()],
     }),
   });
 };

@@ -20,6 +20,9 @@ router.get('/', async (req, res) => {
     return [category.get('id'), category.get('name')];
   });
 
+  // manually add to the front of all categories an option of 0 (none selected)
+  allCategories.unshift([0, '--- Select a Category ---']);
+
   const fetchTags = await Tag.fetchAll();
   const allTags = fetchTags.map((tag) => {
     return [tag.get('id'), tag.get('name')];
@@ -38,7 +41,90 @@ router.get('/', async (req, res) => {
         withRelated: ['category', 'tags'],
       });
 
-      // res.send(products);
+      res.render('products/index', {
+        products: products.toJSON(),
+        form: form.toHTML(bootstrapField),
+      });
+    },
+
+    // if error, also display all products
+    error: async (form) => {
+      // Select * fro Products
+      let products = await q.fetch({
+        withRelated: ['category', 'tags'],
+      });
+
+      res.render('products/index', {
+        products: products.toJSON(),
+        form: form.toHTML(bootstrapField),
+      });
+    },
+
+    // if success, render the search
+    success: async (form) => {
+      const {
+        title,
+        min_cost,
+        max_cost,
+        description,
+        date,
+        min_stock,
+        max_stock,
+        height,
+        width,
+        category_id,
+        tags,
+      } = form.data;
+
+      if (title) {
+        q = q.where('title', 'like', `%${title}%`);
+      }
+
+      if (min_cost) {
+        q = q.where('cost', '>=', min_cost);
+      }
+
+      if (max_cost) {
+        q = q.where('cost', '=<', max_cost);
+      }
+
+      if (description) {
+        q = q.where('description', 'like', `%${description}%`);
+      }
+
+      if (date) {
+        q = q.where('description', '=', `%${description}%`);
+      }
+
+      if (min_stock) {
+        q = q.where('stock', '>=', min_stock);
+      }
+
+      if (max_stock) {
+        q = q.where('stock', '=<', max_stock);
+      }
+
+      if (height !== '0') {
+        q = q.where('height', '=', height);
+      }
+
+      if (width !== '0') {
+        q = q.where('width', '=', width);
+      }
+
+      if (category_id !== '0') {
+        q = q.where('category_id', '=', category_id);
+      }
+
+      if (tags) {
+        q = q
+          .query('join', 'products_tags', 'products.id', 'product_id')
+          .where('tag_id', 'in', tags.split(','));
+      }
+
+      let products = await q.fetch({
+        withRelated: ['category', 'tags'],
+      });
 
       res.render('products/index', {
         products: products.toJSON(),

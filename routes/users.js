@@ -126,6 +126,7 @@ router.post('/login', (req, res) => {
             'error_messages',
             'Your password is incorrect. Please try again'
           );
+
           res.redirect('/users/login');
         }
       } else {
@@ -144,6 +145,20 @@ router.get('/logout', (req, res) => {
   req.session.user = null;
   req.flash('success_messages', 'You have been successfully logged out');
   res.redirect('/users/login');
+});
+
+router.get('/profile', (req, res) => {
+  if (req.session.user) {
+    res.render('users/profile', {
+      user: req.session.user,
+    });
+  } else {
+    req.flash(
+      'error_messages',
+      'Please log in before accessing the profile page'
+    );
+    res.redirect('/users/login');
+  }
 });
 
 module.exports = router;

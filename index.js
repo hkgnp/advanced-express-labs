@@ -45,7 +45,7 @@ app.use(
 app.use(
   session({
     // Secret key for the session. Needs to be complex.
-    secret: 'secret',
+    secret: process.env.SESSION_SECRET_KEY,
     // Will not resave the session if there are no changes to the session
     resave: false,
     // If a user comes in without a session, immediately create one
