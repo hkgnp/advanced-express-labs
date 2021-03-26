@@ -76,14 +76,23 @@
             </li>
           </ul>
           {{#if user}}
-          <a href="/users/logout" class="btn btn-danger my-2 my-sm-0">
+          <button class="btn btn-outline-warning btn-sm my-2 mr-2">
+            {{ user.username }}
+          </button>
+          <a href="/users/logout" class="btn btn-danger btn-sm my-2 my-0">
             Logout
           </a>
           {{else}}
-          <a href="/users/login" class="btn btn-outline-warning my-2 my-sm-0">
+          <a
+            href="/users/login"
+            class="btn btn-outline-warning btn-sm my-2 my-0"
+          >
             Login
           </a>
-          <a href="/users/register" class="btn btn-warning my-2 my-sm-0 ml-2">
+          <a
+            href="/users/register"
+            class="btn btn-warning my-2 btn-sm my-0 ml-2"
+          >
             Register
           </a>
           {{/if}}

@@ -152,10 +152,14 @@ router.get('/:product_id/update', async (req, res) => {
   form.fields.category_id.value = productToEdit.get('category_id');
   // Set selected tags to the form to be displayed
   form.fields.tags.value = selectedTags;
+  form.fields.img_url.value = productToEdit.get('img_url');
 
   res.render('products/update', {
     form: form.toHTML(bootstrapField),
     product: productToEdit.toJSON(),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
   });
 });
 

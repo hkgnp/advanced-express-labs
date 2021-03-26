@@ -4,13 +4,30 @@
 
 {{#block 'content'}}
 <form method="GET">
-  {{{form}}}<input type="submit" class="btn btn-primary btn-sm mb-5" />
+  <a
+    class="btn btn-info mb-3 btn-sm"
+    data-toggle="collapse"
+    href="#collapseExample"
+    role="button"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+  >
+    Search and Filter
+  </a>
+
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body bg-dark text-light">
+      {{{form}}}
+      <input type="submit" class="btn btn-primary btn-sm mb-3" />
+    </div>
+  </div>
 </form>
 
 <div class="table-responsive table-dark">
   <table class="table">
     <thead>
       <tr>
+        <th>Preview</th>
         <th>Title</th>
         <th>Cost (in cents)</th>
         <th>Description</th>
@@ -26,6 +43,11 @@
     <tbody>
       {{#each products}}
       <tr>
+        <td>
+          {{#if this.img_url}}
+          <img class="img-fluid" src="{{ this.img_url }}" />
+          {{/if}}
+        </td>
         <td>{{ this.title }}</td>
         <td>{{ this.cost }}</td>
         <td>{{ this.description }}</td>
