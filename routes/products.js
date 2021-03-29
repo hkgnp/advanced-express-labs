@@ -14,19 +14,16 @@ const {
 // import middleware protection
 const { checkifLoggedIn } = require('../middleware');
 
+// import dal
+const getProductDataLayer = require('../dal/products');
+
 router.get('/', async (req, res) => {
-  const fetchCategories = await Category.fetchAll();
-  const allCategories = fetchCategories.map((category) => {
-    return [category.get('id'), category.get('name')];
-  });
+  const allCategories = await getProductDataLayer.getAllCategories();
 
   // manually add to the front of all categories an option of 0 (none selected)
   allCategories.unshift([0, '--- Select a Category ---']);
 
-  const fetchTags = await Tag.fetchAll();
-  const allTags = fetchTags.map((tag) => {
-    return [tag.get('id'), tag.get('name')];
-  });
+  const allTags = await getProductDataLayer.getAllTags();
 
   const searchForm = createProductSearchForm(allCategories, allTags);
 
@@ -135,15 +132,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/create', async (req, res) => {
-  const fetchCategories = await Category.fetchAll();
-  const allCategories = fetchCategories.map((category) => {
-    return [category.get('id'), category.get('name')];
-  });
+  const allCategories = await getProductDataLayer.getAllCategories();
 
-  const fetchTags = await Tag.fetchAll();
-  const allTags = fetchTags.map((tag) => {
-    return [tag.get('id'), tag.get('name')];
-  });
+  const allTags = await getProductDataLayer.getAllTags();
 
   const productForm = createProductForm(allCategories, allTags);
 
@@ -156,15 +147,9 @@ router.get('/create', async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
-  const fetchCategories = await Category.fetchAll();
-  const allCategories = fetchCategories.map((category) => {
-    return [category.get('id'), category.get('name')];
-  });
+  const allCategories = await getProductDataLayer.getAllCategories();
 
-  const fetchTags = await Tag.fetchAll();
-  const allTags = fetchTags.map((tag) => {
-    return [tag.get('id'), tag.get('name')];
-  });
+  const allTags = await getProductDataLayer.getAllTags();
 
   const productForm = createProductForm(allCategories, allTags);
   productForm.handle(req, {
@@ -204,14 +189,9 @@ router.post('/create', async (req, res) => {
 });
 
 router.get('/:product_id/update', async (req, res) => {
-  const fetchCategories = await Category.fetchAll();
-  const allCategories = fetchCategories.map((category) => {
-    return [category.get('id'), category.get('name')];
-  });
-  const fetchTags = await Tag.fetchAll();
-  const allTags = fetchTags.map((tag) => {
-    return [tag.get('id'), tag.get('name')];
-  });
+  const allCategories = await getProductDataLayer.getAllCategories();
+
+  const allTags = await getProductDataLayer.getAllTags();
 
   //1. Get the product that we want to update
   const productToEdit = await Product.where({
