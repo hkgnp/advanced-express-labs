@@ -194,12 +194,9 @@ router.get('/:product_id/update', async (req, res) => {
   const allTags = await getProductDataLayer.getAllTags();
 
   //1. Get the product that we want to update
-  const productToEdit = await Product.where({
-    id: req.params.product_id,
-  }).fetch({
-    required: true,
-    withRelated: ['category', 'tags'],
-  });
+  const productToEdit = await getProductDataLayer.getProductById(
+    req.params.product_id
+  );
 
   // Option 1
   // const selectedTags = await productToEdit.related('tags').pluck('id');
@@ -230,12 +227,9 @@ router.get('/:product_id/update', async (req, res) => {
 });
 
 router.post('/:product_id/update', async (req, res) => {
-  const productToEdit = await Product.where({
-    id: req.params.product_id,
-  }).fetch({
-    required: true,
-    withRelated: ['tags'],
-  });
+  const productToEdit = await getProductDataLayer.getProductById(
+    req.params.product_id
+  );
 
   // Option 1
   // const selectedTags = await productToEdit.related('tags').pluck('id');
@@ -283,11 +277,9 @@ router.post('/:product_id/update', async (req, res) => {
 });
 
 router.get('/:product_id/delete', async (req, res) => {
-  const productToDelete = await Product.where({
-    id: req.params.product_id,
-  }).fetch({
-    required: true,
-  });
+  const productToDelete = await getProductDataLayer.getProductById(
+    req.params.product_id
+  );
 
   res.render('products/delete.hbs', {
     product: productToDelete.toJSON(),
@@ -295,11 +287,9 @@ router.get('/:product_id/delete', async (req, res) => {
 });
 
 router.post('/:product_id/delete', async (req, res) => {
-  const productToDelete = await Product.where({
-    id: req.params.product_id,
-  }).fetch({
-    required: true,
-  });
+  const productToDelete = await getProductDataLayer.getProductById(
+    req.params.product_id
+  );
 
   await productToDelete.destroy();
 

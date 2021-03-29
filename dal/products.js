@@ -17,4 +17,14 @@ const getAllTags = async () => {
   return allTags;
 };
 
-module.exports = { getAllCategories, getAllTags };
+const getProductById = async (productId) => {
+  const product = await Product.where({
+    id: productId,
+  }).fetch({
+    require: true,
+    withRelated: ['category', 'tags'],
+  });
+  return product;
+};
+
+module.exports = { getAllCategories, getAllTags, getProductById };
