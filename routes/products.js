@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import the Product model
-const { Product, Category, Tag } = require('../models');
+const { Product } = require('../models');
 
 // import the forms
 const {

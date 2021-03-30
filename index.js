@@ -113,6 +113,7 @@ app.use((req, res, next) => {
 // API routes
 const api = {
   products: require('./routes/api/products'),
+  users: require('./routes/api/users'),
 };
 
 const main = async () => {
@@ -124,6 +125,7 @@ const main = async () => {
   app.use('/cart', shoppingCartRoutes);
   app.use('/checkout', checkoutRoutes);
   app.use('/api/products', express.json(), api.products);
+  app.use('/api/users', express.json(), api.users);
 };
 
 main();
