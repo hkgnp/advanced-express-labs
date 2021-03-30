@@ -12,6 +12,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const csurf = require('csurf');
 const cloudinaryRoutes = require('./routes/cloudinary');
+const shoppingCartRoutes = require('./routes/shoppingCart');
+const checkoutRoutes = require('./routes/checkout');
 
 // create an instance of express app
 let app = express();
@@ -99,6 +101,8 @@ const main = async () => {
   app.use('/products', productsRoutes);
   app.use('/users', userRoutes);
   app.use('/cloudinary', cloudinaryRoutes);
+  app.use('/cart', shoppingCartRoutes);
+  app.use('/checkout', checkoutRoutes);
 };
 
 main();
