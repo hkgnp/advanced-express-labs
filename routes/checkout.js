@@ -81,4 +81,8 @@ router.post(
   }
 );
 
+router.get('/error', async (req, res) => {
+  // Insert rendering of error message if payment is unsuccessful
+});
+
 module.exports = router;
