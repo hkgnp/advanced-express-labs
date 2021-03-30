@@ -59,7 +59,17 @@ app.use(
 app.use(flash());
 
 // Set up csurf
-app.use(csurf());
+// Create instance of csurf to only be used in some circumstances
+const csurfInstance = csurf();
+// Create custom middleware so that when processing payment, csrf token is not used.
+app.use((err, req, res, next) => {
+  if (req.url === '/checkout/process_payment') {
+    next();
+  } else {
+    csurfInstance(req, res, next);
+  }
+});
+
 app.use((err, req, res, next) => {
   if (err) {
     req.flash(
@@ -91,8 +101,10 @@ app.use((req, res, next) => {
 
 // req.csrfToken
 app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
+  if (req.csrfToken) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+  }
 });
 
 const main = async () => {

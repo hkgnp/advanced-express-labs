@@ -54,4 +54,6 @@ router.get('/', async (req, res) => {
   });
 });
 
+router.post('/process_payment', async (req, res) => {});
+
 module.exports = router;
