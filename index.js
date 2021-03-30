@@ -30,29 +30,29 @@ wax.setLayoutPath('./views/layouts');
 
 // date time
 hbs.registerHelper('dateFormat', function (date, options) {
-  const formatToUse =
-    (arguments[1] && arguments[1].hash && arguments[1].hash.format) ||
-    'DD/MM/YYYY';
-  return moment(date).format(formatToUse);
+    const formatToUse =
+        (arguments[1] && arguments[1].hash && arguments[1].hash.format) ||
+        'DD/MM/YYYY';
+    return moment(date).format(formatToUse);
 });
 
 // enable forms
 app.use(
-  express.urlencoded({
-    extended: false,
-  })
+    express.urlencoded({
+        extended: false,
+    })
 );
 
 // set up session
 app.use(
-  session({
-    // Secret key for the session. Needs to be complex.
-    secret: process.env.SESSION_SECRET_KEY,
-    // Will not resave the session if there are no changes to the session
-    resave: false,
-    // If a user comes in without a session, immediately create one
-    saveUninitialized: true,
-  })
+    session({
+        // Secret key for the session. Needs to be complex.
+        secret: process.env.SESSION_SECRET_KEY,
+        // Will not resave the session if there are no changes to the session
+        resave: false,
+        // If a user comes in without a session, immediately create one
+        saveUninitialized: true,
+    })
 );
 
 // Set up flash
@@ -63,23 +63,23 @@ app.use(flash());
 const csurfInstance = csurf();
 // Create custom middleware so that when processing payment, csrf token is not used.
 app.use((err, req, res, next) => {
-  if (req.url === '/checkout/process_payment') {
-    next();
-  } else {
-    csurfInstance(req, res, next);
-  }
+    if (req.url === '/checkout/process_payment') {
+        next();
+    } else {
+        csurfInstance(req, res, next);
+    }
 });
 
 app.use((err, req, res, next) => {
-  if (err) {
-    req.flash(
-      'error_messages',
-      'The form has expired. Please reload your page.'
-    );
-    res.redirect('back');
-  } else {
-    next();
-  }
+    if (err) {
+        req.flash(
+            'error_messages',
+            'The form has expired. Please reload your page.'
+        );
+        res.redirect('back');
+    } else {
+        next();
+    }
 });
 
 // Set up middleware
@@ -87,38 +87,38 @@ app.use((err, req, res, next) => {
 
 // Flash messages middleware
 app.use((req, res, next) => {
-  // Inject success and error messages into the hbs file
-  res.locals.success_messages = req.flash('success_messages');
-  res.locals.error_messages = req.flash('error_messages');
-  next();
+    // Inject success and error messages into the hbs file
+    res.locals.success_messages = req.flash('success_messages');
+    res.locals.error_messages = req.flash('error_messages');
+    next();
 });
 
 // User session middleware
 app.use((req, res, next) => {
-  res.locals.user = req.session.user;
-  next();
+    res.locals.user = req.session.user;
+    next();
 });
 
 // req.csrfToken
 app.use((req, res, next) => {
-  if (req.csrfToken) {
-    res.locals.csrfToken = req.csrfToken();
+    if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+    }
     next();
-  }
 });
 
 const main = async () => {
-  app.use('/', landingRoutes);
-  app.use('/company', corporateRoutes);
-  app.use('/products', productsRoutes);
-  app.use('/users', userRoutes);
-  app.use('/cloudinary', cloudinaryRoutes);
-  app.use('/cart', shoppingCartRoutes);
-  app.use('/checkout', checkoutRoutes);
+    app.use('/', landingRoutes);
+    app.use('/company', corporateRoutes);
+    app.use('/products', productsRoutes);
+    app.use('/users', userRoutes);
+    app.use('/cloudinary', cloudinaryRoutes);
+    app.use('/cart', shoppingCartRoutes);
+    app.use('/checkout', checkoutRoutes);
 };
 
 main();
 
 app.listen(3000, () => {
-  console.log('Server has started on port 3000');
+    console.log('Server has started on port 3000');
 });
