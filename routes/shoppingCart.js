@@ -38,7 +38,7 @@ router.get('/:product_id/remove', async (req, res) => {
   res.redirect('/cart');
 });
 
-router.post('/:product_id/quanity/update', async (req, res) => {
+router.post('/:product_id/quantity/update', async (req, res) => {
   let cart = new CartServices(req.session.user.id);
   await cart.updateQuantity(req.params.product_id, req.body.quantity);
   req.flash('success_messages', 'Quantity has been updated');
