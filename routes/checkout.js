@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
 const CartServices = require('../services/cart_services');
 
@@ -9,7 +10,6 @@ router.get('/', async (req, res) => {
   //1. Create line items = tell Stripe what customer is paying for
   let cartServices = new CartServices(req.session.user.id);
   const allCartItems = await cartServices.getAll();
-  console.log(allCartItems);
   let lineItems = [];
   let meta = [];
 
@@ -54,6 +54,31 @@ router.get('/', async (req, res) => {
   });
 });
 
-router.post('/process_payment', async (req, res) => {});
+router.post(
+  '/process_payment',
+  bodyParser.raw({ type: 'application/json' }),
+  async (req, res) => {
+    let payload = req.body;
+    let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+    let sigHeader = req.headers['stripe-signature'];
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        payload,
+        sigHeader,
+        endpointSecret
+      );
+    } catch (e) {
+      res.send({
+        error: e.message,
+      });
+      console.log(e.message);
+    }
+    if (event.type == 'checkout.session.completed') {
+      console.log(event.data.object);
+    }
+    res.sendStatus(200);
+  }
+);
 
 module.exports = router;
