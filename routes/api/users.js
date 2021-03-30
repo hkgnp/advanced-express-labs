@@ -5,6 +5,7 @@ const crypto = require('crypto');
 
 // import the User model
 const { User } = require('../../models');
+const { checkIfLoggedInJWT } = require('../../middleware');
 
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.TOKEN_SECRET, {
@@ -39,6 +40,11 @@ router.post('/login', async (req, res) => {
       error: 'Invalid email and password',
     });
   }
+});
+
+router.get('/profile', checkIfLoggedInJWT, (req, res) => {
+  let user = req.user;
+  res.send(user);
 });
 
 module.exports = router;

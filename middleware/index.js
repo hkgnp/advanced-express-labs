@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const checkIfLoggedIn = (req, res, next) => {
   if (req.session.user) {
     next();
@@ -10,4 +12,23 @@ const checkIfLoggedIn = (req, res, next) => {
   }
 };
 
-module.exports = { checkIfLoggedIn };
+const checkIfLoggedInJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+      if (err) {
+        res.sendStatus(403);
+      }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+    res.send({
+      error: 'Problems authenticating',
+    });
+  }
+};
+
+module.exports = { checkIfLoggedIn, checkIfLoggedInJWT };
