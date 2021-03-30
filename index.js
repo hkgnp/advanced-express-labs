@@ -63,7 +63,10 @@ app.use(flash());
 const csurfInstance = csurf();
 // Create custom middleware so that when processing payment, csrf token is not used.
 app.use((req, res, next) => {
-  if (req.url === '/checkout/process_payment') {
+  if (
+    req.url === '/checkout/process_payment' ||
+    req.url.slice(0, 5) === '/api/'
+  ) {
     return next();
   }
   csurfInstance(req, res, next);
@@ -107,6 +110,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// API routes
+const api = {
+  products: require('./routes/api/products'),
+};
+
 const main = async () => {
   app.use('/', landingRoutes);
   app.use('/company', corporateRoutes);
@@ -115,6 +123,7 @@ const main = async () => {
   app.use('/cloudinary', cloudinaryRoutes);
   app.use('/cart', shoppingCartRoutes);
   app.use('/checkout', checkoutRoutes);
+  app.use('/api/products', express.json(), api.products);
 };
 
 main();

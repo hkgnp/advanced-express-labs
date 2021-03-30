@@ -296,4 +296,5 @@ router.post('/:product_id/delete', async (req, res) => {
   req.flash('success_messages', 'Product has been deleted successfully');
   res.redirect('/products');
 });
+
 module.exports = router;

@@ -1,6 +1,10 @@
 // import the Product model
 const { Product, Category, Tag } = require('../models');
 
+const getAllProducts = async () => {
+  return await Product.fetchAll();
+};
+
 const getAllCategories = async () => {
   const fetchCategories = await Category.fetchAll();
   const allCategories = fetchCategories.map((category) => {
@@ -27,4 +31,9 @@ const getProductById = async (productId) => {
   return product;
 };
 
-module.exports = { getAllCategories, getAllTags, getProductById };
+module.exports = {
+  getAllCategories,
+  getAllTags,
+  getProductById,
+  getAllProducts,
+};
