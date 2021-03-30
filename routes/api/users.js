@@ -7,9 +7,9 @@ const crypto = require('crypto');
 const { User } = require('../../models');
 const { checkIfLoggedInJWT } = require('../../middleware');
 
-const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.TOKEN_SECRET, {
-    expiresIn: '1h',
+const generateAccessToken = (user, secret, expiresIn) => {
+  return jwt.sign(user, secret, {
+    expiresIn: expiresIn,
   });
 };
 
@@ -28,12 +28,27 @@ router.post('/login', async (req, res) => {
   });
   console.log(user);
   if (user && user.get('password') === getHashedPassword(req.body.password)) {
-    let accessToken = generateAccessToken({
-      username: user.get('username'),
-      email: user.get('email'),
-      id: user.get('id'),
-    });
-    res.send({ accessToken });
+    let accessToken = generateAccessToken(
+      {
+        username: user.get('username'),
+        email: user.get('email'),
+        id: user.get('id'),
+      },
+      process.env.TOKEN_SECRET,
+      '15m'
+    );
+
+    let refreshToken = generateAccessToken(
+      {
+        username: user.get('username'),
+        email: user.get('email'),
+        id: user.get('id'),
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      '7d'
+    );
+
+    res.send({ accessToken, refreshToken });
   } else {
     res.status(401);
     res.send({
