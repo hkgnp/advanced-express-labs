@@ -32,16 +32,12 @@ class CartServices {
     return cartItem;
   };
 
-  removeItem = async (productId) => {
-    return await getCartDataLayer.updateQuantity(
-      this.user_id,
-      productId,
-      newQuantity
-    );
-  };
+  async removeItem(productId) {
+    return await getCartDataLayer.removeItem(this.user_id, productId);
+  }
 
   updateQuantity = async (productId, newQuantity) => {
-    return await cartDataLayer.updateQuantity(
+    return await getCartDataLayer.updateQuantity(
       this.user_id,
       productId,
       newQuantity

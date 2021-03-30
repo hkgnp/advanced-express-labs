@@ -35,6 +35,7 @@ router.get('/:product_id/remove', async (req, res) => {
   let cart = new CartServices(req.session.user.id);
   await cart.removeItem(req.params.product_id);
   req.flash('success_messages', 'Item successfully removed');
+  res.redirect('/cart');
 });
 
 router.post('/:product_id/quanity/update', async (req, res) => {
